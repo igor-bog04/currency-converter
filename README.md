@@ -2,7 +2,9 @@
 
 A modern desktop application built with Python and CustomTkinter that fetches official exchange rates from the National Bank of Moldova (BNM) and performs precise Decimal-based currency conversions.
 
-![Application Screenshot](docs/screenshots/app_screenshot.png)
+| Dark theme | Light theme | Offline with cache |
+|---|---|---|
+| ![Dark theme](docs/screenshots/converter-dark.png) | ![Light theme](docs/screenshots/converter-light.png) | ![Offline mode](docs/screenshots/offline-cache.png) |
 
 ## Features
 
