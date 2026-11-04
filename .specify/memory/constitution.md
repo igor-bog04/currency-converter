@@ -1,50 +1,33 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report: version 1.0.0 → 1.1.0 | Modified principles: Architecture & Separation of Concerns, Reliability & User Communication, Financial Correctness, Offline-First Data Integrity, Quality, UX, and Delivery Discipline | Added sections: Delivery Standards; Development Workflow | Removed sections: None | Deferred TODOs: TODO(RATIFICATION_DATE): original ratification date not provided -->
+# Currency Converter Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Architecture and Separation of Concerns
+The project MUST separate the rate source, cache, conversion logic, and UI into distinct modules. The UI and business logic MUST depend on small interfaces, while concrete implementations are composed in a single composition root. This structure is required because it keeps the system testable, replaceable, and resilient to changes in data source or presentation logic.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Reliability and User-Centered Error Handling
+The application MUST never crash on network, parsing, or file errors. Every failure MUST be caught, translated into a clear Russian-language message, and shown to the user without exposing internal implementation details. Recovery paths and explicit user guidance are mandatory because trust in a financial tool depends on predictable, understandable behavior.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Financial Correctness Through Decimal Arithmetic
+All monetary calculations MUST use Decimal arithmetic rather than floating-point numbers. Conversion results MUST be rounded to 2 decimal places, while rate display values MUST be shown with 4 decimal places. This requirement is non-negotiable because monetary precision and auditability are core product guarantees.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Offline-First Data Integrity
+The last successful source response MUST be cached locally and retained across app restarts. The user MUST always see the date and source of the rate currently in use, even when the network is unavailable. This requirement ensures continuity, traceability, and resilience in the face of connectivity loss.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Quality, UX, and Delivery Discipline
+The product MUST provide a polished modern UI with consistent spacing, rounded cards, clear disabled states, and both light and dark themes. All non-UI logic MUST be covered by pytest unit tests with mocked network access, and the full suite MUST run with a single documented command. Documentation MUST be in English, UI text MUST be in Russian, and the team MUST use a separate branch for each stage, meaningful commit messages, and pull requests for merges into main.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Delivery Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The project MUST keep README documentation in English and keep user-visible text in Russian. The release process MUST include a documented test command, accurate setup guidance, and clear descriptions of supported features and assumptions. Any platform or workflow change that affects development, release, or user behavior MUST be reflected in documentation before merge.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+The team MUST work in separate branches for each stage of the lifecycle, including specification, implementation, and testing. Meaningful commit messages are required so that the history explains the intent of each change. Merges into main MUST occur only through pull requests, with the review process confirming that functionality, tests, and documentation remain aligned with this Constitution.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution defines the non-negotiable operating rules for the currency converter project. Amendments require written rationale, review of the affected principle or section, and approval before they become binding. Versioning follows Semantic Versioning: PATCH for clarifying wording or non-semantic refinements, MINOR for new guidance or materially expanded requirements, and MAJOR for removals or redefinitions of mandatory principles. Compliance review requires each change to confirm that the product remains correct, reliable, user-safe, and testable under the requirements in this Constitution.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): original ratification date not provided | **Last Amended**: 2026-11-04
