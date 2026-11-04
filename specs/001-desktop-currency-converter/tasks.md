@@ -112,11 +112,11 @@ error when none are usable.
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement the single-snapshot JSON cache in `%APPDATA%\CurrencyConverter\cache.json`, serializing Decimal values as strings and replacing a same-directory temporary file atomically in `currency_converter/cache.py`
-- [ ] T025 [US3] Extend `currency_converter/rate_provider.py` to fall back to last-successful cache after online source unavailability and expose explicit accept/decline outcomes without replacing cache with invalid data
-- [ ] T026 [US3] Run network lookup, parse, and fallback in a worker and deliver outcomes through a thread-safe queue polled with UI-thread callbacks in `currency_converter/ui.py`
-- [ ] T027 [US3] Add Russian-language messages for connection, timeout, malformed XML, cache read/write, no-cache, and cached-rate acceptance/decline outcomes in `currency_converter/ui.py`
-- [ ] T028 [US3] Handle cancellation and window close without blocking the UI or applying stale worker results in `currency_converter/ui.py`
+- [X] T024 [US3] Implement the single-snapshot JSON cache in `%APPDATA%\CurrencyConverter\cache.json`, serializing Decimal values as strings and replacing a same-directory temporary file atomically in `currency_converter/cache.py`
+- [X] T025 [US3] Extend `currency_converter/rate_provider.py` to fall back to last-successful cache after online source unavailability and expose explicit accept/decline outcomes without replacing cache with invalid data
+- [X] T026 [US3] Run network lookup, parse, and fallback in a worker and deliver outcomes through a thread-safe queue polled with UI-thread callbacks in `currency_converter/ui.py`
+- [X] T027 [US3] Add Russian-language messages for connection, timeout, malformed XML, cache read/write, no-cache, and cached-rate acceptance/decline outcomes in `currency_converter/ui.py`
+- [X] T028 [US3] Handle cancellation and window close without blocking the UI or applying stale worker results in `currency_converter/ui.py`
 
 **Checkpoint**: Online and cached rates are presented transparently and recoverably.
 
