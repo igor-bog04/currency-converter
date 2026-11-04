@@ -135,9 +135,9 @@ dot-decimal, grouping, and non-finite inputs; verify only specified valid forms 
 
 ### Implementation for User Story 4
 
-- [ ] T031 [US4] Implement strict amount parsing into finite Decimal values consisting only of digits with at most one comma or dot separator and at most two fractional digits; reject zero, negative, empty, non-numeric, grouping separators, scientific notation, multiple separators, and excess precision in `currency_converter/validation.py`
-- [ ] T032 [US4] Connect amount and selector validation to Convert-button disabled state and adjacent Russian errors in `currency_converter/ui.py`
-- [ ] T033 [US4] Preserve input validation and current conversion result when swapping selected currencies in `currency_converter/ui.py`
+- [X] T031 [US4] Implement strict amount parsing into finite Decimal values consisting only of digits with at most one comma or dot separator and at most two fractional digits; reject zero, negative, empty, non-numeric, grouping separators, scientific notation, multiple separators, and excess precision in `currency_converter/validation.py`
+- [X] T032 [US4] Connect amount and selector validation to Convert-button disabled state and adjacent Russian errors in `currency_converter/ui.py`
+- [X] T033 [US4] Preserve input validation and current conversion result when swapping selected currencies in `currency_converter/ui.py`
 
 **Checkpoint**: Invalid values cannot reach the converter; valid amount formats are consistently
 accepted.
