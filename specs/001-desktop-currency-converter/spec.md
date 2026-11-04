@@ -26,6 +26,12 @@ Required behavior:
 - Caching: the last successful response is saved locally and survives restarts.
 - Malformed or unexpected XML from the source is treated like an unavailable source, never a crash."
 
+## Clarifications
+
+### Session 2026-11-04
+
+- Q: Which time zone should determine the default “today” date in the converter? → A: The current date in Chisinau, Moldova.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Convert money for a selected date (Priority: P1)
@@ -44,9 +50,9 @@ A user enters an amount, chooses a source and target currency, and selects a rat
 
 ---
 
-### User Story 2 - Handle unavailable or missing rate data (Priority: P1)
+### User Story 2 - Handle missing rate data (Priority: P1)
 
-A user selects a date for which the BNM source is unavailable, closed, or empty. The app does not fail; it finds the latest usable historic rate within the allowed fallback window and clearly explains the date used and the reason.
+A user selects a date for which BNM returns no rates, no usable rates, or a date-specific HTTP 404. The app finds the latest usable historic rate within the allowed fallback window and clearly explains the date used and the reason. Transport and server errors are handled through offline/cache recovery instead of date fallback.
 
 **Why this priority**: Financial tools must remain usable even when rates are missing, and users must understand which rate is currently being applied.
 
@@ -56,7 +62,7 @@ A user selects a date for which the BNM source is unavailable, closed, or empty.
 
 1. **Given** the selected date has no published BNM rates, **When** the app checks the source, **Then** it searches backward up to 10 days and uses the latest available date.
 2. **Given** the fallback date is found, **When** conversion is displayed, **Then** the app states which date is in use and why the fallback was applied.
-3. **Given** no source data is available and no cached data exists, **When** conversion is attempted, **Then** the app shows a clear error message instead of crashing.
+3. **Given** a transport or server error occurs and no cached data exists, **When** conversion is attempted, **Then** the app shows a clear error message instead of crashing.
 
 ---
 
@@ -103,7 +109,7 @@ A user enters invalid values or leaves required fields blank. The app prevents c
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST provide a desktop currency conversion form with an amount field, source currency selector, target currency selector, rate date selector, swap button, and Convert action.
+- **FR-001**: The system MUST provide a desktop currency conversion form with an amount field, source currency selector, target currency selector, rate date selector defaulting to the current date in Chisinau, Moldova, swap button, and Convert action.
 - **FR-002**: The system MUST include Moldova Leu (MDL) in the currency list with a fixed rate of 1 and MUST treat MDL as the reference currency when converting between two foreign currencies.
 - **FR-003**: The system MUST fetch official BNM exchange-rate data from the published XML endpoint for the selected date and MUST derive each currency rate as Value / Nominal.
 - **FR-004**: The system MUST calculate cross rates through MDL for conversions between two non-MDL currencies and MUST display the rate in both directions, including the resulting converted amount.
