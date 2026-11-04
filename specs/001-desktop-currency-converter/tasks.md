@@ -64,11 +64,11 @@ date/source. Same-currency conversion returns the amount unchanged with rate 1.
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, HTTP error mapping, XML structural validation, `Value / Nominal` rates, and MDL insertion at rate 1 in `currency_converter/bnm_client.py`
-- [ ] T012 [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
-- [ ] T013 [US1] Implement the initial rate provider path for one selected date and validated BNM snapshot in `currency_converter/rate_provider.py`
-- [ ] T014 [US1] Implement the currency selectors including MDL, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
-- [ ] T015 [US1] Wire concrete BNM client, provider, converter, and UI implementations from the composition root in `main.py`
+- [X] T011 [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, HTTP error mapping, XML structural validation, `Value / Nominal` rates, and MDL insertion at rate 1 in `currency_converter/bnm_client.py`
+- [X] T012 [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
+- [X] T013 [US1] Implement the initial rate provider path for one selected date and validated BNM snapshot in `currency_converter/rate_provider.py`
+- [X] T014 [US1] Implement the currency selectors including MDL, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
+- [X] T015 [US1] Wire concrete BNM client, provider, converter, and UI implementations from the composition root in `main.py`
 
 **Checkpoint**: User Story 1 supports online conversion; invalid/missing-rate recovery is extended in
 following stories.
