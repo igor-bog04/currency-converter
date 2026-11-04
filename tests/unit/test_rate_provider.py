@@ -45,10 +45,9 @@ class TestRateProviderDateFallback:
         mock_client = MagicMock()
         mock_cache = MagicMock()
         prior_date = SAMPLE_DATE - timedelta(days=1)
-        # First call raises NoRatesError (date-specific), second returns snapshot
-        from currency_converter.bnm_client import NoRatesError
+        from currency_converter.interfaces import NoRatesForDateError
         mock_client.fetch_rates.side_effect = [
-            NoRatesError("No rates for date"),
+            NoRatesForDateError("No rates for date"),
             make_snapshot(prior_date)
         ]
         mock_cache.load.return_value = None
@@ -59,11 +58,11 @@ class TestRateProviderDateFallback:
     def test_fallback_stops_at_10_prior_dates(self):
         mock_client = MagicMock()
         mock_cache = MagicMock()
-        from currency_converter.bnm_client import NoRatesError
-        mock_client.fetch_rates.side_effect = NoRatesError("No rates")
+        from currency_converter.interfaces import NoRatesForDateError
+        mock_client.fetch_rates.side_effect = NoRatesForDateError("No rates")
         mock_cache.load.return_value = None
         provider = RateProvider(client=mock_client, cache=mock_cache)
-        with pytest.raises(Exception):
+        with pytest.raises(NoRatesForDateError):
             provider.get_rates(SAMPLE_DATE)
         # Should have tried at most 11 dates (selected + 10 prior)
         assert mock_client.fetch_rates.call_count <= 11
@@ -71,10 +70,10 @@ class TestRateProviderDateFallback:
     def test_404_triggers_date_fallback(self):
         mock_client = MagicMock()
         mock_cache = MagicMock()
-        from currency_converter.bnm_client import NoRatesError
+        from currency_converter.interfaces import NoRatesForDateError
         prior_date = SAMPLE_DATE - timedelta(days=1)
         mock_client.fetch_rates.side_effect = [
-            NoRatesError("HTTP 404"),
+            NoRatesForDateError("HTTP 404"),
             make_snapshot(prior_date)
         ]
         mock_cache.load.return_value = None
@@ -87,7 +86,7 @@ class TestRateProviderNetworkFailure:
     def test_network_error_triggers_cache_fallback(self):
         mock_client = MagicMock()
         mock_cache = MagicMock()
-        from currency_converter.bnm_client import SourceUnavailableError
+        from currency_converter.interfaces import SourceUnavailableError
         mock_client.fetch_rates.side_effect = SourceUnavailableError("No network")
         mock_cache.load.return_value = make_snapshot()
         provider = RateProvider(client=mock_client, cache=mock_cache)
@@ -97,11 +96,11 @@ class TestRateProviderNetworkFailure:
     def test_transport_error_does_not_trigger_date_fallback(self):
         mock_client = MagicMock()
         mock_cache = MagicMock()
-        from currency_converter.bnm_client import SourceUnavailableError
+        from currency_converter.interfaces import SourceUnavailableError
         mock_client.fetch_rates.side_effect = SourceUnavailableError("Timeout")
         mock_cache.load.return_value = None
         provider = RateProvider(client=mock_client, cache=mock_cache)
-        with pytest.raises(Exception):
+        with pytest.raises(SourceUnavailableError):
             provider.get_rates(SAMPLE_DATE)
         # Should NOT have retried with prior dates
         assert mock_client.fetch_rates.call_count == 1

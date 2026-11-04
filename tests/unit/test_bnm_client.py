@@ -32,6 +32,16 @@ EMPTY_XML = """<?xml version="1.0" encoding="utf-8"?>
 <ValCurs Date="02.11.2026" name="Official exchange rate">
 </ValCurs>"""
 
+NO_USABLE_RATES_XML = """<?xml version="1.0" encoding="utf-8"?>
+<ValCurs Date="02.11.2026" name="Official exchange rate">
+  <Valute>
+    <CharCode></CharCode>
+    <Nominal>0</Nominal>
+    <Value>0</Value>
+    <Name></Name>
+  </Valute>
+</ValCurs>"""
+
 MALFORMED_XML = """this is not xml at all"""
 
 
@@ -130,55 +140,71 @@ class TestBnmClientXmlParsing:
 
 
 class TestBnmClientFailures:
-    def test_connection_error_raises_or_returns_none(self):
+    def test_connection_error_raises_source_unavailable(self):
+        from currency_converter.interfaces import SourceUnavailableError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_get.side_effect = requests.ConnectionError("No network")
-            with pytest.raises(Exception):
+            with pytest.raises(SourceUnavailableError):
                 client.fetch_rates(date(2026, 11, 4))
 
-    def test_timeout_error_raises_or_returns_none(self):
+    def test_timeout_error_raises_source_unavailable(self):
+        from currency_converter.interfaces import SourceUnavailableError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_get.side_effect = requests.Timeout("Timed out")
-            with pytest.raises(Exception):
+            with pytest.raises(SourceUnavailableError):
                 client.fetch_rates(date(2026, 11, 4))
 
-    def test_http_404_treated_as_no_rates(self):
+    def test_server_error_500_raises_source_unavailable(self):
+        from currency_converter.interfaces import SourceUnavailableError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_response = MagicMock()
-            mock_response.status_code = 404
+            mock_response.status_code = 500
             mock_get.return_value = mock_response
-            # 404 for specific date => date-fallback, should raise a specific error or return None
-            with pytest.raises(Exception):
+            with pytest.raises(SourceUnavailableError):
                 client.fetch_rates(date(2026, 11, 4))
 
-    def test_malformed_xml_raises(self):
+    def test_malformed_xml_raises_source_unavailable(self):
+        from currency_converter.interfaces import SourceUnavailableError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.text = MALFORMED_XML
             mock_get.return_value = mock_response
-            with pytest.raises(Exception):
+            with pytest.raises(SourceUnavailableError):
                 client.fetch_rates(date(2026, 11, 4))
 
-    def test_empty_xml_raises_or_returns_empty(self):
+    def test_http_404_raises_no_rates_for_date(self):
+        from currency_converter.interfaces import NoRatesForDateError
+        client = BnmClient()
+        with patch("requests.get") as mock_get:
+            mock_response = MagicMock()
+            mock_response.status_code = 404
+            mock_get.return_value = mock_response
+            with pytest.raises(NoRatesForDateError):
+                client.fetch_rates(date(2026, 11, 4))
+
+    def test_empty_xml_raises_no_rates_for_date(self):
+        from currency_converter.interfaces import NoRatesForDateError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_response = MagicMock()
             mock_response.status_code = 200
             mock_response.text = EMPTY_XML
             mock_get.return_value = mock_response
-            with pytest.raises(Exception):
+            with pytest.raises(NoRatesForDateError):
                 client.fetch_rates(date(2026, 11, 4))
 
-    def test_server_error_500_raises(self):
+    def test_xml_without_usable_rates_raises_no_rates_for_date(self):
+        from currency_converter.interfaces import NoRatesForDateError
         client = BnmClient()
         with patch("requests.get") as mock_get:
             mock_response = MagicMock()
-            mock_response.status_code = 500
+            mock_response.status_code = 200
+            mock_response.text = NO_USABLE_RATES_XML
             mock_get.return_value = mock_response
-            with pytest.raises(Exception):
+            with pytest.raises(NoRatesForDateError):
                 client.fetch_rates(date(2026, 11, 4))

@@ -55,7 +55,7 @@ class TestFullConversionFlow:
     def test_cache_used_when_network_fails(self):
         mock_client = MagicMock()
         mock_cache = MagicMock()
-        from currency_converter.bnm_client import SourceUnavailableError
+        from currency_converter.interfaces import SourceUnavailableError
         mock_client.fetch_rates.side_effect = SourceUnavailableError("No network")
         mock_cache.load.return_value = make_snapshot()
 

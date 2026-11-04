@@ -20,19 +20,19 @@ class TestCurrency:
         assert isinstance(c.rate_to_mdl, Decimal)
 
     def test_currency_code_non_empty(self):
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             Currency(code="", name="Euro", rate_to_mdl=Decimal("19.65"))
 
     def test_currency_name_non_empty(self):
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             Currency(code="EUR", name="", rate_to_mdl=Decimal("19.65"))
 
     def test_currency_rate_positive(self):
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             Currency(code="EUR", name="Euro", rate_to_mdl=Decimal("-1"))
 
     def test_currency_rate_not_zero(self):
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             Currency(code="EUR", name="Euro", rate_to_mdl=Decimal("0"))
 
 
@@ -62,7 +62,7 @@ class TestRateSnapshot:
 
     def test_rate_snapshot_requires_mdl(self):
         eur = Currency(code="EUR", name="Euro", rate_to_mdl=Decimal("19.65"))
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             RateSnapshot(
                 rate_date=date(2026, 11, 4),
                 source="BNM",
@@ -71,7 +71,7 @@ class TestRateSnapshot:
 
     def test_rate_snapshot_requires_non_mdl_currency(self):
         mdl = Currency(code="MDL", name="Moldovan Leu", rate_to_mdl=Decimal("1"))
-        with pytest.raises((ValueError, TypeError, Exception)):
+        with pytest.raises(ValueError):
             RateSnapshot(
                 rate_date=date(2026, 11, 4),
                 source="BNM",
