@@ -89,9 +89,9 @@ the requested/effective date distinction and reason.
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML as date-fallback outcomes, while classifying transport and server errors as source-unavailable outcomes, using the failing mocked-HTTP cases from T016
-- [ ] T019 [US2] Implement sequential lookup of the selected date through 10 preceding dates only for empty/no-rate responses or date-specific HTTP 404; route transport/server errors to the offline/cache recovery path in `currency_converter/rate_provider.py`
-- [ ] T020 [US2] Present Russian-language loading, no-rate fallback reason, requested/effective date, and active-state feedback in `currency_converter/ui.py`
+- [X] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML as date-fallback outcomes, while classifying transport and server errors as source-unavailable outcomes, using the failing mocked-HTTP cases from T016
+- [X] T019 [US2] Implement sequential lookup of the selected date through 10 preceding dates only for empty/no-rate responses or date-specific HTTP 404; route transport/server errors to the offline/cache recovery path in `currency_converter/rate_provider.py`
+- [X] T020 [US2] Present Russian-language loading, no-rate fallback reason, requested/effective date, and active-state feedback in `currency_converter/ui.py`
 
 **Checkpoint**: User Story 2 selects the latest available rate in the defined search window.
 
