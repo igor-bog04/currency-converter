@@ -146,11 +146,11 @@ accepted.
 
 **Purpose**: Complete cross-story documentation, review, and validation.
 
-- [ ] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
+- [X] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
 - [X] T035 [P] Add isolated provider-to-converter integration tests with mocked BNM responses and a temporary cache in `tests/integration/test_conversion_flow.py`
-- [ ] T036 Run `python -m pytest` and resolve failures across `tests/`
-- [ ] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
-- [ ] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
+- [X] T036 Run `python -m pytest` and resolve failures across `tests/`
+- [X] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
+- [X] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
 
 ## Dependencies & Execution Order
 
