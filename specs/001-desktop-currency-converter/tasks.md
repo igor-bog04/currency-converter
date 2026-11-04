@@ -42,9 +42,9 @@ after the shared foundation is complete.
 story.
 
 - [X] T005 [P] Add model and interface contract unit tests in `tests/unit/test_models.py`; run them and confirm failure before implementing the models and protocols
-- [ ] T006 Define `Currency`, `RateSnapshot`, and conversion result models in `currency_converter/models.py`; currency code and name are non-empty, codes are unique per snapshot, rate is a finite positive Decimal, and MDL rate is exactly 1
-- [ ] T007 Define narrow rate-source, cache, and rate-provider protocols plus typed source/cache outcome errors in `currency_converter/interfaces.py`
-- [ ] T008 Add `currency_converter/__init__.py` package exports for the public model and interface types
+- [X] T006 Define `Currency`, `RateSnapshot`, and conversion result models in `currency_converter/models.py`; currency code and name are non-empty, codes are unique per snapshot, rate is a finite positive Decimal, and MDL rate is exactly 1
+- [X] T007 Define narrow rate-source, cache, and rate-provider protocols plus typed source/cache outcome errors in `currency_converter/interfaces.py`
+- [X] T008 Add `currency_converter/__init__.py` package exports for the public model and interface types
 
 **Checkpoint**: Shared data shapes and module boundaries are ready; user-story work can proceed.
 
@@ -64,11 +64,11 @@ date/source. Same-currency conversion returns the amount unchanged with rate 1.
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, HTTP error mapping, XML structural validation, `Value / Nominal` rates, and MDL insertion at rate 1 in `currency_converter/bnm_client.py`
-- [ ] T012 [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
-- [ ] T013 [US1] Implement the initial rate provider path for one selected date and validated BNM snapshot in `currency_converter/rate_provider.py`
-- [ ] T014 [US1] Implement the currency selectors including MDL, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
-- [ ] T015 [US1] Wire concrete BNM client, provider, converter, and UI implementations from the composition root in `main.py`
+- [X] T011 [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, HTTP error mapping, XML structural validation, `Value / Nominal` rates, and MDL insertion at rate 1 in `currency_converter/bnm_client.py`
+- [X] T012 [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
+- [X] T013 [US1] Implement the initial rate provider path for one selected date and validated BNM snapshot in `currency_converter/rate_provider.py`
+- [X] T014 [US1] Implement the currency selectors including MDL, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
+- [X] T015 [US1] Wire concrete BNM client, provider, converter, and UI implementations from the composition root in `main.py`
 
 **Checkpoint**: User Story 1 supports online conversion; invalid/missing-rate recovery is extended in
 following stories.
@@ -89,9 +89,9 @@ the requested/effective date distinction and reason.
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML as date-fallback outcomes, while classifying transport and server errors as source-unavailable outcomes, using the failing mocked-HTTP cases from T016
-- [ ] T019 [US2] Implement sequential lookup of the selected date through 10 preceding dates only for empty/no-rate responses or date-specific HTTP 404; route transport/server errors to the offline/cache recovery path in `currency_converter/rate_provider.py`
-- [ ] T020 [US2] Present Russian-language loading, no-rate fallback reason, requested/effective date, and active-state feedback in `currency_converter/ui.py`
+- [X] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML as date-fallback outcomes, while classifying transport and server errors as source-unavailable outcomes, using the failing mocked-HTTP cases from T016
+- [X] T019 [US2] Implement sequential lookup of the selected date through 10 preceding dates only for empty/no-rate responses or date-specific HTTP 404; route transport/server errors to the offline/cache recovery path in `currency_converter/rate_provider.py`
+- [X] T020 [US2] Present Russian-language loading, no-rate fallback reason, requested/effective date, and active-state feedback in `currency_converter/ui.py`
 
 **Checkpoint**: User Story 2 selects the latest available rate in the defined search window.
 
@@ -112,11 +112,11 @@ error when none are usable.
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement the single-snapshot JSON cache in `%APPDATA%\CurrencyConverter\cache.json`, serializing Decimal values as strings and replacing a same-directory temporary file atomically in `currency_converter/cache.py`
-- [ ] T025 [US3] Extend `currency_converter/rate_provider.py` to fall back to last-successful cache after online source unavailability and expose explicit accept/decline outcomes without replacing cache with invalid data
-- [ ] T026 [US3] Run network lookup, parse, and fallback in a worker and deliver outcomes through a thread-safe queue polled with UI-thread callbacks in `currency_converter/ui.py`
-- [ ] T027 [US3] Add Russian-language messages for connection, timeout, malformed XML, cache read/write, no-cache, and cached-rate acceptance/decline outcomes in `currency_converter/ui.py`
-- [ ] T028 [US3] Handle cancellation and window close without blocking the UI or applying stale worker results in `currency_converter/ui.py`
+- [X] T024 [US3] Implement the single-snapshot JSON cache in `%APPDATA%\CurrencyConverter\cache.json`, serializing Decimal values as strings and replacing a same-directory temporary file atomically in `currency_converter/cache.py`
+- [X] T025 [US3] Extend `currency_converter/rate_provider.py` to fall back to last-successful cache after online source unavailability and expose explicit accept/decline outcomes without replacing cache with invalid data
+- [X] T026 [US3] Run network lookup, parse, and fallback in a worker and deliver outcomes through a thread-safe queue polled with UI-thread callbacks in `currency_converter/ui.py`
+- [X] T027 [US3] Add Russian-language messages for connection, timeout, malformed XML, cache read/write, no-cache, and cached-rate acceptance/decline outcomes in `currency_converter/ui.py`
+- [X] T028 [US3] Handle cancellation and window close without blocking the UI or applying stale worker results in `currency_converter/ui.py`
 
 **Checkpoint**: Online and cached rates are presented transparently and recoverably.
 
@@ -135,9 +135,9 @@ dot-decimal, grouping, and non-finite inputs; verify only specified valid forms 
 
 ### Implementation for User Story 4
 
-- [ ] T031 [US4] Implement strict amount parsing into finite Decimal values consisting only of digits with at most one comma or dot separator and at most two fractional digits; reject zero, negative, empty, non-numeric, grouping separators, scientific notation, multiple separators, and excess precision in `currency_converter/validation.py`
-- [ ] T032 [US4] Connect amount and selector validation to Convert-button disabled state and adjacent Russian errors in `currency_converter/ui.py`
-- [ ] T033 [US4] Preserve input validation and current conversion result when swapping selected currencies in `currency_converter/ui.py`
+- [X] T031 [US4] Implement strict amount parsing into finite Decimal values consisting only of digits with at most one comma or dot separator and at most two fractional digits; reject zero, negative, empty, non-numeric, grouping separators, scientific notation, multiple separators, and excess precision in `currency_converter/validation.py`
+- [X] T032 [US4] Connect amount and selector validation to Convert-button disabled state and adjacent Russian errors in `currency_converter/ui.py`
+- [X] T033 [US4] Preserve input validation and current conversion result when swapping selected currencies in `currency_converter/ui.py`
 
 **Checkpoint**: Invalid values cannot reach the converter; valid amount formats are consistently
 accepted.
@@ -146,11 +146,11 @@ accepted.
 
 **Purpose**: Complete cross-story documentation, review, and validation.
 
-- [ ] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
+- [X] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
 - [X] T035 [P] Add isolated provider-to-converter integration tests with mocked BNM responses and a temporary cache in `tests/integration/test_conversion_flow.py`
-- [ ] T036 Run `python -m pytest` and resolve failures across `tests/`
-- [ ] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
-- [ ] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
+- [X] T036 Run `python -m pytest` and resolve failures across `tests/`
+- [X] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
+- [X] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
 
 ## Dependencies & Execution Order
 

@@ -1,15 +1,31 @@
 # Desktop Currency Converter
 
-A desktop application that fetches official exchange rates from the National Bank of Moldova (BNM) and performs currency conversions.
+A modern desktop application built with Python and CustomTkinter that fetches official exchange rates from the National Bank of Moldova (BNM) and performs precise Decimal-based currency conversions.
+
+| Dark theme | Light theme | Offline with cache |
+|---|---|---|
+| ![Dark theme](docs/screenshots/converter-dark.png) | ![Light theme](docs/screenshots/converter-light.png) | ![Offline mode](docs/screenshots/offline-cache.png) |
+
+## Features
+
+- **Official BNM Rates**: Fetches official exchange rates directly from the National Bank of Moldova XML API (`https://www.bnm.md/en/official_exchange_rates`).
+- **Precision Monetary Arithmetic**: Uses Python's `Decimal` type for all conversions to guarantee financial accuracy and prevent binary floating-point rounding errors.
+- **Reference Currency (MDL)**: Seamlessly supports Moldovan Leu (MDL) as the baseline currency with a fixed rate of 1; conversions between foreign currencies are calculated via cross rates through MDL.
+- **Same-Currency Conversions**: Handles identical source and target currencies gracefully, returning the original amount with an effective rate of 1.
+- **Directional Rates & Attribution**: Displays exchange rates in both directions (`1 A = x B` and `1 B = y A`) along with effective rate date and source attribution (BNM).
+- **Automatic 10-Day Date Fallback**: If rates are missing or unpublished for the selected date (e.g. weekends or bank holidays), the application automatically steps backward day-by-day (up to 10 days) to the latest available rate snapshot and informs the user.
+- **Offline-First Resilience**: Automatically persists the last successfully received rate snapshot to local disk. When the network is unavailable or requests fail, the user is offered the cached rates along with their original date.
+- **Strict Input Validation**: Validates amounts strictly—only positive amounts with up to two decimal places (accepting both `.` and `,` as decimal separators) are allowed; letters, zero, negatives, grouping spaces, and scientific notation are rejected with adjacent Russian-language error messages.
+- **Modern Responsive UI**: Built with CustomTkinter featuring rounded cards, a custom indigo accent color (`#4F46E5` / `#6366F1`), light/dark mode switching, background network threading with an active loading indicator, currency swap button, clear disabled button states, and stale result protection. All user interface text is presented in Russian.
 
 ## Prerequisites
 
-- Python 3.11 or higher
-- Windows (uses `%APPDATA%` for cache storage)
+- Windows 10/11
+- Python 3.11 or newer
 
-## Setup
+## Installation & Setup
 
-1. Clone the repository and switch to the appropriate branch:
+1. Clone the repository:
    ```powershell
    git clone <repo-url>
    cd currency-converter
@@ -21,18 +37,28 @@ A desktop application that fetches official exchange rates from the National Ban
    .\.venv\Scripts\Activate.ps1
    ```
 
-3. Install dependencies:
+3. Install required dependencies:
    ```powershell
    pip install -r requirements.txt
    ```
 
-## Launch
+## Running the Application
+
+To launch the desktop currency converter:
 
 ```powershell
 .\.venv\Scripts\python.exe main.py
 ```
 
+Or, if the virtual environment is already activated:
+
+```powershell
+python main.py
+```
+
 ## Running Tests
+
+Run the full pytest suite with:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -v
@@ -44,9 +70,16 @@ Or, with the virtual environment activated:
 python -m pytest -v
 ```
 
-## Notes
+All non-UI business logic is thoroughly covered by unit and integration tests using mocked HTTP responses and temporary caches, requiring no live network connection.
 
-- Exchange rates are fetched from the BNM public XML API (`bnm.md`). These are **reference rates** and may differ from commercial bank rates.
-- The last successful rate snapshot is cached in `%APPDATA%\CurrencyConverter\cache.json` and offered when the network is unavailable.
-- All user-visible text in the UI is in Russian.
-- Tests use mocked HTTP calls and do not require a live internet connection.
+## Cache Location
+
+The last successful rate snapshot is saved locally as an atomic JSON file at:
+```text
+%APPDATA%\CurrencyConverter\cache.json
+```
+(typically `C:\Users\<Username>\AppData\Roaming\CurrencyConverter\cache.json`).
+
+## Reference Rate Caveat
+
+Rates obtained from the National Bank of Moldova are **official reference exchange rates**. Commercial exchange bureaus and banks set their own retail rates, which may differ from the official BNM rates displayed here.
