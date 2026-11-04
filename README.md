@@ -2,6 +2,8 @@
 
 A modern desktop application built with Python and CustomTkinter that fetches official exchange rates from the National Bank of Moldova (BNM) and performs precise Decimal-based currency conversions.
 
+![Application Screenshot](docs/screenshots/app_screenshot.png)
+
 ## Features
 
 - **Official BNM Rates**: Fetches official exchange rates directly from the National Bank of Moldova XML API (`https://www.bnm.md/en/official_exchange_rates`).
@@ -12,7 +14,7 @@ A modern desktop application built with Python and CustomTkinter that fetches of
 - **Automatic 10-Day Date Fallback**: If rates are missing or unpublished for the selected date (e.g. weekends or bank holidays), the application automatically steps backward day-by-day (up to 10 days) to the latest available rate snapshot and informs the user.
 - **Offline-First Resilience**: Automatically persists the last successfully received rate snapshot to local disk. When the network is unavailable or requests fail, the user is offered the cached rates along with their original date.
 - **Strict Input Validation**: Validates amounts strictly—only positive amounts with up to two decimal places (accepting both `.` and `,` as decimal separators) are allowed; letters, zero, negatives, grouping spaces, and scientific notation are rejected with adjacent Russian-language error messages.
-- **Modern Responsive UI**: Built with CustomTkinter featuring rounded cards, a single accent color theme, light/dark mode switching, background network threading with an active loading indicator, currency swap button, and dynamic Convert-button enablement. All user interface text is presented in Russian.
+- **Modern Responsive UI**: Built with CustomTkinter featuring rounded cards, a custom indigo accent color (`#4F46E5` / `#6366F1`), light/dark mode switching, background network threading with an active loading indicator, currency swap button, clear disabled button states, and stale result protection. All user interface text is presented in Russian.
 
 ## Prerequisites
 
