@@ -17,6 +17,16 @@ after the shared foundation is complete.
 - **[Story]**: User-story label for story phases; setup, foundation, and polish tasks omit it.
 - Every task specifies concrete file paths.
 
+## Mandatory Branch and Pull Request Gates
+
+- Specification artifacts MUST be authored on branch `specs`. Merge that stage into `main` through
+  a pull request before implementation or test-stage work begins.
+- Application source and runtime configuration MUST be changed on branch `implementation`.
+- Test code and test fixtures MUST be changed on branch `tests`.
+- Each of `specs`, `implementation`, and `tests` MUST merge into `main` only through a pull request.
+- For test-first work, write and run the relevant tests on `tests` before implementing their
+  behavior on `implementation`; record that they fail before implementation and pass afterward.
+
 ## Phase 1: Setup
 
 **Purpose**: Initialize the Python desktop project and test environment.
@@ -49,15 +59,15 @@ date/source. Same-currency conversion returns the amount unchanged with rate 1.
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Add XML parsing and rate-derivation tests for `CharCode`, `Name`, `Nominal`, `Value`, and MDL insertion in `tests/unit/test_bnm_client.py`
-- [ ] T010 [P] [US1] Add Decimal conversion tests for MDL, foreign cross rates, both directional rates, same-currency conversion, and 2/4-place formatting in `tests/unit/test_converter.py`
+- [ ] T009 [P] [US1] Add mocked-HTTP tests for BNM URL/query construction, `DD.MM.YYYY` dates, 10-second timeout, HTTP failures, XML parsing, rate derivation, and MDL insertion in `tests/unit/test_bnm_client.py`; run them and confirm failure before implementing the client
+- [ ] T010 [P] [US1] Add Decimal conversion tests for MDL, foreign cross rates, both directional rates, same-currency conversion, and 2/4-place formatting in `tests/unit/test_converter.py`; run them and confirm failure before implementing conversion behavior
 
 ### Implementation for User Story 1
 
-- [ ] T011 [P] [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, XML structural validation, and `Value / Nominal` rates in `currency_converter/bnm_client.py`
-- [ ] T012 [P] [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
+- [ ] T011 [US1] Implement BNM request construction, `DD.MM.YYYY` formatting, 10-second timeout, HTTP error mapping, XML structural validation, `Value / Nominal` rates, and MDL insertion at rate 1 in `currency_converter/bnm_client.py`
+- [ ] T012 [US1] Implement pure Decimal cross-rate conversion, same-currency behavior, and `ROUND_HALF_UP` output rounding in `currency_converter/converter.py`
 - [ ] T013 [US1] Implement the initial rate provider path for one selected date and validated BNM snapshot in `currency_converter/rate_provider.py`
-- [ ] T014 [US1] Implement the currency selectors, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
+- [ ] T014 [US1] Implement the currency selectors including MDL, amount control, date control, swap control, disabled-until-required-fields result action, result and rate display, BNM/date attribution, and light/dark themed rounded-card UI in `currency_converter/ui.py`
 - [ ] T015 [US1] Wire concrete BNM client, provider, converter, and UI implementations from the composition root in `main.py`
 
 **Checkpoint**: User Story 1 supports online conversion; invalid/missing-rate recovery is extended in
@@ -74,13 +84,13 @@ the requested/effective date distinction and reason.
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Add provider tests for selected-date success, empty response, date-specific 404, nearest-prior selection, and the 10-prior-date limit in `tests/unit/test_rate_provider.py`
-- [ ] T017 [P] [US2] Add UI outcome tests for requested date, effective date, and fallback explanation in `tests/unit/test_ui_state.py`
+- [ ] T016 [P] [US2] Add provider tests for selected-date success, empty response, date-specific 404, nearest-prior selection, and the 10-prior-date limit in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing fallback
+- [ ] T017 [P] [US2] Add UI outcome tests for requested date, effective date, and fallback explanation in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing fallback messaging
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML separately from transport/server failures
-- [ ] T019 [US2] Implement sequential lookup of selected date through 10 preceding dates and typed fallback outcomes in `currency_converter/rate_provider.py`
+- [ ] T018 [US2] Extend `currency_converter/bnm_client.py` to classify date-specific HTTP 404 and empty/no-rate XML as date-fallback outcomes, while classifying transport and server errors as source-unavailable outcomes, using the failing mocked-HTTP cases from T016
+- [ ] T019 [US2] Implement sequential lookup of the selected date through 10 preceding dates only for empty/no-rate responses or date-specific HTTP 404; route transport/server errors to the offline/cache recovery path in `currency_converter/rate_provider.py`
 - [ ] T020 [US2] Present Russian-language loading, no-rate fallback reason, requested/effective date, and active-state feedback in `currency_converter/ui.py`
 
 **Checkpoint**: User Story 2 selects the latest available rate in the defined search window.
@@ -96,9 +106,9 @@ error when none are usable.
 
 ### Tests for User Story 3
 
-- [ ] T021 [P] [US3] Add cache tests for decimal-string JSON round trips, AppData path, atomic replacement, corrupt JSON, and read/write failures in `tests/unit/test_cache.py`
-- [ ] T022 [P] [US3] Add provider tests for network timeout/errors, malformed XML, cache offer/decline/accept, and cache date reporting in `tests/unit/test_rate_provider.py`
-- [ ] T023 [P] [US3] Add UI resilience tests for Russian error and cache offer states in `tests/unit/test_ui_state.py`
+- [ ] T021 [P] [US3] Add cache tests for decimal-string JSON round trips, AppData path, atomic replacement, corrupt JSON, and read/write failures in `tests/unit/test_cache.py`; run them and confirm failure before implementing cache behavior
+- [ ] T022 [P] [US3] Add provider tests for network timeout/errors, malformed XML, cache offer/decline/accept, and cache date reporting in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing cache fallback
+- [ ] T023 [P] [US3] Add UI resilience tests for Russian error and cache offer states in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing those UI states
 
 ### Implementation for User Story 3
 
@@ -120,12 +130,12 @@ dot-decimal, grouping, and non-finite inputs; verify only specified valid forms 
 
 ### Tests for User Story 4
 
-- [ ] T029 [P] [US4] Add amount validation tests for empty, letters, zero, negative, over-two-decimal, comma, dot, grouping, scientific notation, and non-finite inputs in `tests/unit/test_validation.py`
-- [ ] T030 [US4] Add UI-state tests for Convert-button enablement and adjacent validation feedback in `tests/unit/test_ui_state.py`
+- [ ] T029 [P] [US4] Add amount validation tests for empty, letters, zero, negative, over-two-decimal, comma, dot, grouping separators, scientific notation, multiple separators, and non-finite inputs in `tests/unit/test_validation.py`; run them and confirm failure before implementing validation
+- [ ] T030 [US4] Add UI-state tests for Convert-button enablement and adjacent validation feedback in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing validation feedback
 
 ### Implementation for User Story 4
 
-- [ ] T031 [US4] Implement strict amount parsing into finite Decimal values, accepting either comma or dot and rejecting zero, negative, empty, non-numeric, and more than two fractional digits in `currency_converter/validation.py`
+- [ ] T031 [US4] Implement strict amount parsing into finite Decimal values consisting only of digits with at most one comma or dot separator and at most two fractional digits; reject zero, negative, empty, non-numeric, grouping separators, scientific notation, multiple separators, and excess precision in `currency_converter/validation.py`
 - [ ] T032 [US4] Connect amount and selector validation to Convert-button disabled state and adjacent Russian errors in `currency_converter/ui.py`
 - [ ] T033 [US4] Preserve input validation and current conversion result when swapping selected currencies in `currency_converter/ui.py`
 
@@ -138,9 +148,9 @@ accepted.
 
 - [ ] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
 - [ ] T035 [P] Add isolated provider-to-converter integration tests with mocked BNM responses and a temporary cache in `tests/integration/test_conversion_flow.py`
-- [ ] T036 Run `python -m pytest` and resolve failures across `tests/unit/`
-- [ ] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths
-- [ ] T038 Review branch and PR workflow for separate specs, implementation, and test stages and document any required handoff in `README.md`
+- [ ] T036 Run `python -m pytest` and resolve failures across `tests/`
+- [ ] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
+- [ ] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
 
 ## Dependencies & Execution Order
 
@@ -157,27 +167,29 @@ accepted.
 ### User Story Dependencies
 
 - **US1 (P1)**: Starts after Phase 2; no dependency on another story. Defines the MVP.
-- **US2 (P1)**: Extends US1's rate-provider path; should follow US1 to avoid duplicate work.
-- **US3 (P2)**: Builds on the source/provider outcomes from US1 and US2; implement after them.
-- **US4 (P2)**: Uses the UI introduced in US1. Its isolated validation module and unit tests can be prepared after Phase 2, but the story's UI integration follows US2 and US3 to avoid parallel edits to `currency_converter/ui.py`.
+- **US1 test-first gate**: Complete T009 and T010 on branch `tests`, run them and record their expected pre-implementation failures, then implement T011-T015 on branch `implementation`.
+- **US2 (P1)**: Extends US1's rate-provider path; complete T016-T017 and record expected failures on `tests` before T018-T020 on `implementation`.
+- **US3 (P2)**: Builds on the source/provider outcomes from US1 and US2; complete T021-T023 and record expected failures on `tests` before T024-T028 on `implementation`.
+- **US4 (P2)**: Uses the UI introduced in US1. Complete T029-T030 and record expected failures on `tests` before T031-T033 on `implementation`; UI integration follows US2 and US3 to avoid parallel edits to `currency_converter/ui.py`.
 
 ### Parallel Opportunities
 
 - Setup: T003 can run alongside T001/T002 after directory creation. T004 and T034 both update `README.md`, so keep them sequential.
 - Foundation: T005 defines expected contracts before T006/T007; implementation starts only after the tests fail against the missing types. T008 follows the model and interface definitions.
-- US1: T009, T010, T011, and T012 are separable files after foundation; T013 follows the client; T014 and T015 follow their injected interface definitions.
-- US2: T016 and T017 are independent tests; T018 and T019 are sequential source/provider changes, followed by T020.
-- US3: T021, T022, and T023 can be developed in separate files; T024 precedes T025; T026-T028 touch UI and should be coordinated or serialized.
-- US4: T029 is isolated in `tests/unit/test_validation.py`; T030 shares the UI-state test file with earlier stories and should be coordinated. T031 precedes T032; T032/T033 follow the earlier story UI changes.
+- US1: T009 and T010 may be authored in parallel on `tests`; run both and record expected failures before beginning T011/T012 on `implementation`. T011 and T012 are independent once those tests fail; T013 follows the client; T014 and T015 follow their injected interface definitions.
+- US2: T016 and T017 are independent tests on `tests`; record their failures before implementing T018-T020 on `implementation`. T018 and T019 are sequential source/provider changes, followed by T020.
+- US3: T021-T023 can be developed in separate files on `tests`; record their failures before implementing T024-T028 on `implementation`. T024 precedes T025; T026-T028 touch UI and should be coordinated or serialized.
+- US4: T029 is isolated in `tests/unit/test_validation.py`; T030 shares the UI-state test file with earlier stories and should be coordinated. Complete both tests first and record expected failures; then T031 precedes T032, and T032/T033 follow the earlier story UI changes.
 
 ## Parallel Example: User Story 1
 
 ```text
-After Phase 2, write and run the tests first:
+After Phase 2, write and run both tests on the `tests` branch and confirm they fail before implementation:
 Task: T009 XML client tests in tests/unit/test_bnm_client.py
 Task: T010 Decimal converter tests in tests/unit/test_converter.py
 
-Confirm these tests fail before implementing their behavior, then:
+After the test-stage work has been reviewed, its PR is merged into `main`, and the failing test
+state is recorded, implement the behavior on the `implementation` branch:
 Task: T011 BNM client in currency_converter/bnm_client.py
 Task: T012 Pure converter in currency_converter/converter.py
 
@@ -206,5 +218,6 @@ Task: T013 Rate provider in currency_converter/rate_provider.py
 - `[P]` tasks use distinct files and do not depend on unfinished tasks.
 - `[US#]` labels map directly to user stories in `specs/001-desktop-currency-converter/spec.md`.
 - Tests are required by the project constitution; use mocked HTTP and avoid live-source tests.
+- For each story, finish its test-stage tasks and record expected failures before beginning the corresponding implementation tasks.
 - Keep user-visible UI text in Russian and project documentation in English.
 - The `specs` branch is for specification artifacts; implementation and test stages require their own branches and main merges occur through pull requests.

@@ -1,4 +1,4 @@
-<!-- Sync Impact Report: version 1.0.0 → 1.1.0 | Modified principles: Architecture & Separation of Concerns, Reliability & User Communication, Financial Correctness, Offline-First Data Integrity, Quality, UX, and Delivery Discipline | Added sections: Delivery Standards; Development Workflow | Removed sections: None | Deferred TODOs: TODO(RATIFICATION_DATE): original ratification date not provided -->
+<!-- Sync Impact Report: version 1.1.0 → 1.1.0 | Modified principles: None | Added sections: None | Removed sections: None | Metadata corrected: ratification date set to 2026-11-04 | Deferred TODOs: None -->
 # Currency Converter Constitution
 
 ## Core Principles
@@ -30,4 +30,4 @@ The team MUST work in separate branches for each stage of the lifecycle, includi
 
 This Constitution defines the non-negotiable operating rules for the currency converter project. Amendments require written rationale, review of the affected principle or section, and approval before they become binding. Versioning follows Semantic Versioning: PATCH for clarifying wording or non-semantic refinements, MINOR for new guidance or materially expanded requirements, and MAJOR for removals or redefinitions of mandatory principles. Compliance review requires each change to confirm that the product remains correct, reliable, user-safe, and testable under the requirements in this Constitution.
 
-**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): original ratification date not provided | **Last Amended**: 2026-11-04
+**Version**: 1.1.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-04

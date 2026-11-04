@@ -29,13 +29,17 @@ successfully validated BNM rate snapshot and its effective date.
 
 **Project Type**: Desktop application.
 
-**Performance Goals**: A normal conversion completes within the spec's 10-second user target when
-BNM responds normally. Each HTTP attempt times out after 10 seconds. Network work and date fallback
-run off the UI thread, with visible loading/progress and no UI freeze.
+**Performance Goals**: A conversion completes within 10 seconds when one BNM request succeeds over
+a normal internet connection; the target excludes date fallback. Each HTTP attempt times out after
+10 seconds. Network work and date fallback run off the UI thread. During fallback, a loading
+indicator remains visible and the UI stays responsive.
 
 **Constraints**: Rates and amounts use Decimal only; conversion output is rounded to 2 decimal
 places and displayed rates to 4. Search the selected date and then up to 10 preceding calendar
-dates. Persist cache updates atomically. UI content is Russian; documentation is English.
+dates. Amount input consists of digits with at most one comma or dot decimal separator and at most
+2 fractional digits; reject grouping separators, scientific notation, multiple separators, and
+other invalid input. Persist cache updates atomically. UI content is Russian; documentation is
+English.
 
 **Scale/Scope**: Single-user desktop app, one visible conversion workflow, and one last-successful
 rate snapshot in the local cache; no accounts or server-side synchronization.
@@ -51,8 +55,8 @@ rate snapshot in the local cache; no accounts or server-side synchronization.
 | Use Decimal for all money math; round results to 2 and rates to 4 decimal places | Conversion layer retains Decimal precision until formatting/quantization | PASS |
 | Persist last successful source data across restarts and always identify rate date/source | Atomic JSON snapshot in AppData; result metadata includes effective date and BNM/source status | PASS |
 | Provide polished UI, light/dark themes, clear disabled states | CustomTkinter UI includes themed rounded cards, an accent color, and explicit control states | PASS |
-| Test all non-UI logic with pytest and mocked network access; document one test command | Unit suite uses mocked HTTP; quickstart and README specify `python -m pytest` | PASS |
-| English documentation and Russian UI; staged branches and PR merges | Documentation and UI locales are separated; planning remains on `specs` branch and later stages use dedicated branches/PRs | PASS |
+| Test all non-UI logic with pytest and mocked network access; document one test command | Unit suite uses mocked HTTP, including the BNM request boundary; quickstart and README specify `python -m pytest` | PASS |
+| English documentation and Russian UI; staged branches and PR merges | Specification is on `specs`, application code on `implementation`, and tests on `tests`; each stage merges into `main` only through a PR | PASS |
 
 No constitutional violations or unresolved technical choices remain at the start of design.
 Post-design review: the generated model, BNM contract, and validation guide preserve all
@@ -79,6 +83,7 @@ specs/001-desktop-currency-converter/
 main.py                         # Composition root; wires concrete implementations
 currency_converter/
 ├── __init__.py
+├── interfaces.py               # Rate-source, cache, and provider protocols
 ├── models.py                   # Currency, RateSnapshot, conversion data
 ├── bnm_client.py               # HTTP retrieval and strict XML parsing
 ├── cache.py                    # AppData JSON cache and atomic persistence
@@ -87,12 +92,16 @@ currency_converter/
 ├── validation.py               # Amount and form validation
 └── ui.py                       # CustomTkinter screens and UI-thread coordination
 tests/
+├── conftest.py                 # Shared fixtures and test configuration
+├── integration/
+│   └── test_conversion_flow.py
 └── unit/
     ├── test_bnm_client.py
     ├── test_cache.py
     ├── test_rate_provider.py
     ├── test_converter.py
     ├── test_models.py
+    ├── test_ui_state.py
     └── test_validation.py
 requirements.txt
 README.md

@@ -109,15 +109,16 @@ A user enters invalid values or leaves required fields blank. The app prevents c
 - **FR-004**: The system MUST calculate cross rates through MDL for conversions between two non-MDL currencies and MUST display the rate in both directions, including the resulting converted amount.
 - **FR-005**: The system MUST show the selected rate date and the BNM data source next to the result at all times.
 - **FR-006**: The system MUST disable the Convert action until the amount field is valid and both source and target currencies have been selected.
-- **FR-007**: The system MUST accept both comma and dot as decimal separators for input and MUST reject empty values, letters, negative amounts, zero amounts, and amounts with more than two decimal places with a field-level error.
+- **FR-007**: The system MUST accept a positive amount consisting only of digits with at most one decimal separator (comma or dot) and at most two fractional digits. It MUST reject empty values, letters, negative amounts, zero amounts, grouping separators (including spaces, apostrophes, or thousands commas), scientific notation, multiple decimal separators, and amounts with more than two fractional digits with an adjacent field-level error.
 - **FR-008**: The system MUST handle same-currency selections without error and MUST return the original amount with an effective rate of 1.
 - **FR-009**: The system MUST treat a missing network connection as an unavailable source and MUST show a clear Russian-language error message without crashing.
-- **FR-010**: The system MUST use cached rates when the source is unavailable and MUST show the cached rate date alongside the fallback message.
-- **FR-011**: The system MUST check the selected date and, when the response is empty or contains no usable rates, step backward day by day up to 10 days to the latest available rate set.
+- **FR-010**: When the source is unavailable, the system MUST offer the last successfully cached rates, show their date, and use them only if the user accepts.
+- **FR-011**: The system MUST check the selected date and, when the response is empty, contains no usable rates, or returns a date-specific HTTP 404, step backward day by day up to 10 days to the latest available rate set. Transport errors and server errors MUST NOT trigger date fallback; they MUST be handled as an unavailable source through the offline/cache recovery path.
 - **FR-012**: The system MUST clearly inform the user which effective rate date is being used and why the fallback was necessary.
 - **FR-013**: The system MUST save the last successful response locally so the cached rates remain available after application restarts.
 - **FR-014**: The system MUST treat malformed or unexpected XML as an unavailable source and MUST not crash the application.
 - **FR-015**: The system MUST keep UI labels and messages in Russian while the project documentation remains in English.
+- **FR-016**: While requesting prior dates because rates are missing, the system MUST show a loading indicator and keep the window responsive.
 
 ### Key Entities
 
@@ -130,12 +131,13 @@ A user enters invalid values or leaves required fields blank. The app prevents c
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can complete a valid conversion in under 10 seconds from entering values to seeing the result under normal desktop conditions.
+- **SC-001**: Users can complete a valid conversion in under 10 seconds from submitting the conversion to seeing the result when one successful BNM response is returned over a normal internet connection. This target does not apply when date fallback is required.
 - **SC-002**: 100% of invalid amount inputs are rejected with a visible error and no conversion is performed.
 - **SC-003**: The app falls back to the latest available rate within 10 days without crashing when BNM data is missing for a selected date.
 - **SC-004**: The user can see the active rate date and source next to each conversion result and can understand when a fallback was applied.
 - **SC-005**: The application remains functional after a restart when cached BNM data is available and does not lose the last successful rate snapshot.
 - **SC-006**: Users successfully complete conversions with same-currency selections and receive a result equal to the entered amount.
+- **SC-007**: During date fallback, the loading indicator remains visible and the window continues responding while prior dates are requested.
 
 ## Assumptions
 
