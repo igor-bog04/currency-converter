@@ -31,17 +31,17 @@ after the shared foundation is complete.
 
 **Purpose**: Initialize the Python desktop project and test environment.
 
-- [ ] T001 Create the `currency_converter/` package, `tests/unit/`, and root `main.py` structure per `specs/001-desktop-currency-converter/plan.md`
-- [ ] T002 Add `customtkinter` and `requests` runtime dependencies and `pytest` test dependency to `requirements.txt`
-- [ ] T003 [P] Create test package configuration and shared fixtures in `tests/conftest.py`
-- [ ] T004 Add English setup, launch, and `python -m pytest` instructions to `README.md`
+- [X] T001 Create the `currency_converter/` package, `tests/unit/`, and root `main.py` structure per `specs/001-desktop-currency-converter/plan.md`
+- [X] T002 Add `customtkinter` and `requests` runtime dependencies and `pytest` test dependency to `requirements.txt`
+- [X] T003 [P] Create test package configuration and shared fixtures in `tests/conftest.py`
+- [X] T004 Add English setup, launch, and `python -m pytest` instructions to `README.md`
 
 ## Phase 2: Foundational
 
 **Purpose**: Establish shared models, explicit boundaries, and error/result types required by every
 story.
 
-- [ ] T005 [P] Add model and interface contract unit tests in `tests/unit/test_models.py`; run them and confirm failure before implementing the models and protocols
+- [X] T005 [P] Add model and interface contract unit tests in `tests/unit/test_models.py`; run them and confirm failure before implementing the models and protocols
 - [ ] T006 Define `Currency`, `RateSnapshot`, and conversion result models in `currency_converter/models.py`; currency code and name are non-empty, codes are unique per snapshot, rate is a finite positive Decimal, and MDL rate is exactly 1
 - [ ] T007 Define narrow rate-source, cache, and rate-provider protocols plus typed source/cache outcome errors in `currency_converter/interfaces.py`
 - [ ] T008 Add `currency_converter/__init__.py` package exports for the public model and interface types
@@ -59,8 +59,8 @@ date/source. Same-currency conversion returns the amount unchanged with rate 1.
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Add mocked-HTTP tests for BNM URL/query construction, `DD.MM.YYYY` dates, 10-second timeout, HTTP failures, XML parsing, rate derivation, and MDL insertion in `tests/unit/test_bnm_client.py`; run them and confirm failure before implementing the client
-- [ ] T010 [P] [US1] Add Decimal conversion tests for MDL, foreign cross rates, both directional rates, same-currency conversion, and 2/4-place formatting in `tests/unit/test_converter.py`; run them and confirm failure before implementing conversion behavior
+- [X] T009 [P] [US1] Add mocked-HTTP tests for BNM URL/query construction, `DD.MM.YYYY` dates, 10-second timeout, HTTP failures, XML parsing, rate derivation, and MDL insertion in `tests/unit/test_bnm_client.py`; run them and confirm failure before implementing the client
+- [X] T010 [P] [US1] Add Decimal conversion tests for MDL, foreign cross rates, both directional rates, same-currency conversion, and 2/4-place formatting in `tests/unit/test_converter.py`; run them and confirm failure before implementing conversion behavior
 
 ### Implementation for User Story 1
 
@@ -84,8 +84,8 @@ the requested/effective date distinction and reason.
 
 ### Tests for User Story 2
 
-- [ ] T016 [P] [US2] Add provider tests for selected-date success, empty response, date-specific 404, nearest-prior selection, and the 10-prior-date limit in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing fallback
-- [ ] T017 [P] [US2] Add UI outcome tests for requested date, effective date, and fallback explanation in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing fallback messaging
+- [X] T016 [P] [US2] Add provider tests for selected-date success, empty response, date-specific 404, nearest-prior selection, and the 10-prior-date limit in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing fallback
+- [X] T017 [P] [US2] Add UI outcome tests for requested date, effective date, and fallback explanation in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing fallback messaging
 
 ### Implementation for User Story 2
 
@@ -106,9 +106,9 @@ error when none are usable.
 
 ### Tests for User Story 3
 
-- [ ] T021 [P] [US3] Add cache tests for decimal-string JSON round trips, AppData path, atomic replacement, corrupt JSON, and read/write failures in `tests/unit/test_cache.py`; run them and confirm failure before implementing cache behavior
-- [ ] T022 [P] [US3] Add provider tests for network timeout/errors, malformed XML, cache offer/decline/accept, and cache date reporting in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing cache fallback
-- [ ] T023 [P] [US3] Add UI resilience tests for Russian error and cache offer states in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing those UI states
+- [X] T021 [P] [US3] Add cache tests for decimal-string JSON round trips, AppData path, atomic replacement, corrupt JSON, and read/write failures in `tests/unit/test_cache.py`; run them and confirm failure before implementing cache behavior
+- [X] T022 [P] [US3] Add provider tests for network timeout/errors, malformed XML, cache offer/decline/accept, and cache date reporting in `tests/unit/test_rate_provider.py`; run them and confirm failure before implementing cache fallback
+- [X] T023 [P] [US3] Add UI resilience tests for Russian error and cache offer states in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing those UI states
 
 ### Implementation for User Story 3
 
@@ -130,8 +130,8 @@ dot-decimal, grouping, and non-finite inputs; verify only specified valid forms 
 
 ### Tests for User Story 4
 
-- [ ] T029 [P] [US4] Add amount validation tests for empty, letters, zero, negative, over-two-decimal, comma, dot, grouping separators, scientific notation, multiple separators, and non-finite inputs in `tests/unit/test_validation.py`; run them and confirm failure before implementing validation
-- [ ] T030 [US4] Add UI-state tests for Convert-button enablement and adjacent validation feedback in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing validation feedback
+- [X] T029 [P] [US4] Add amount validation tests for empty, letters, zero, negative, over-two-decimal, comma, dot, grouping separators, scientific notation, multiple separators, and non-finite inputs in `tests/unit/test_validation.py`; run them and confirm failure before implementing validation
+- [X] T030 [US4] Add UI-state tests for Convert-button enablement and adjacent validation feedback in `tests/unit/test_ui_state.py`; run them and confirm failure before implementing validation feedback
 
 ### Implementation for User Story 4
 
@@ -147,7 +147,7 @@ accepted.
 **Purpose**: Complete cross-story documentation, review, and validation.
 
 - [ ] T034 [P] Document English project overview, BNM reference-rate caveat, setup, run command, cache behavior, and `python -m pytest` in `README.md`
-- [ ] T035 [P] Add isolated provider-to-converter integration tests with mocked BNM responses and a temporary cache in `tests/integration/test_conversion_flow.py`
+- [X] T035 [P] Add isolated provider-to-converter integration tests with mocked BNM responses and a temporary cache in `tests/integration/test_conversion_flow.py`
 - [ ] T036 Run `python -m pytest` and resolve failures across `tests/`
 - [ ] T037 Follow `specs/001-desktop-currency-converter/quickstart.md` to review install, launch, conversion, fallback, offline cache, and invalid-input acceptance paths; manually confirm a successful conversion using one successful BNM response on a normal internet connection completes in under 10 seconds (SC-001), and confirm the loading indicator remains visible and the window stays responsive during date fallback
 - [ ] T038 Confirm specification, implementation, and test changes were kept on `specs`, `implementation`, and `tests` respectively, and that each stage was merged into `main` only through its pull request
