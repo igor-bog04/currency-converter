@@ -107,3 +107,41 @@ class TestInvalidAmounts:
         with pytest.raises(AmountValidationError) as exc_info:
             validate_amount("+10")
         assert exc_info.value is not None
+
+
+class TestValidationSpecificMessages:
+    def test_zero_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("0")
+        assert str(exc_info.value) == "Сумма должна быть больше нуля"
+
+    def test_negative_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("-15")
+        assert str(exc_info.value) == "Сумма должна быть больше нуля"
+
+    def test_letters_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("abc")
+        assert str(exc_info.value) == "Введите число"
+
+    def test_more_than_two_decimals_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("12.345")
+        assert str(exc_info.value) == "Не более 2 знаков после запятой"
+
+    def test_grouping_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("1 000")
+        assert str(exc_info.value) == "Используйте только цифры и один разделитель (точку или запятую)"
+
+    def test_scientific_message(self):
+        from currency_converter.validation import AmountValidationError
+        with pytest.raises(AmountValidationError) as exc_info:
+            validate_amount("1e4")
+        assert str(exc_info.value) == "Используйте только цифры и один разделитель (точку или запятую)"
