@@ -42,9 +42,9 @@ after the shared foundation is complete.
 story.
 
 - [X] T005 [P] Add model and interface contract unit tests in `tests/unit/test_models.py`; run them and confirm failure before implementing the models and protocols
-- [ ] T006 Define `Currency`, `RateSnapshot`, and conversion result models in `currency_converter/models.py`; currency code and name are non-empty, codes are unique per snapshot, rate is a finite positive Decimal, and MDL rate is exactly 1
-- [ ] T007 Define narrow rate-source, cache, and rate-provider protocols plus typed source/cache outcome errors in `currency_converter/interfaces.py`
-- [ ] T008 Add `currency_converter/__init__.py` package exports for the public model and interface types
+- [X] T006 Define `Currency`, `RateSnapshot`, and conversion result models in `currency_converter/models.py`; currency code and name are non-empty, codes are unique per snapshot, rate is a finite positive Decimal, and MDL rate is exactly 1
+- [X] T007 Define narrow rate-source, cache, and rate-provider protocols plus typed source/cache outcome errors in `currency_converter/interfaces.py`
+- [X] T008 Add `currency_converter/__init__.py` package exports for the public model and interface types
 
 **Checkpoint**: Shared data shapes and module boundaries are ready; user-story work can proceed.
 
