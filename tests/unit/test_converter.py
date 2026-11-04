@@ -84,8 +84,8 @@ class TestDirectionalRates:
 
     def test_eur_to_usd_forward_rate(self, snapshot):
         result = convert(Decimal("1"), "EUR", "USD", snapshot)
-        # 19.65 / 18.12 = 1.0844...
-        assert result.source_to_target_rate == Decimal("1.0845")
+        # 19.65 / 18.12 = 1.08443... -> 1.0844 (ROUND_HALF_UP to 4 places)
+        assert result.source_to_target_rate == Decimal("1.0844")
 
     def test_eur_to_usd_reverse_rate(self, snapshot):
         result = convert(Decimal("1"), "EUR", "USD", snapshot)

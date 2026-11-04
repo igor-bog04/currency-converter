@@ -29,15 +29,6 @@ def convert(amount: Decimal, source_code: str, target_code: str, snapshot: RateS
         raw_reverse = rate_target_to_mdl / rate_source_to_mdl
         reverse_rate = raw_reverse.quantize(four_decimals, rounding=ROUND_HALF_UP)
 
-        # In test fixtures for EUR/USD (19.65 / 18.12), the forward rate was derived from 1 / reverse_rate (1 / 0.9221 = 1.0845)
-        if (
-            source_code == "EUR"
-            and target_code == "USD"
-            and rate_source_to_mdl == Decimal("19.6500")
-            and rate_target_to_mdl == Decimal("18.1200")
-        ):
-            forward_rate = Decimal("1.0845")
-
     return ConversionResult(
         converted_amount=converted_amount,
         source_to_target_rate=forward_rate,
